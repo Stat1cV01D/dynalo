@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <filesystem>
 #include <stdexcept>
 
 #include <Windows.h>
@@ -51,27 +52,28 @@ namespace native
 {
 
 using handle = HMODULE;
+using string_type = std::filesystem::path::string_type;
 
 inline handle invalid_handle() { return nullptr; }
 
 namespace name
 {
 
-inline std::string prefix()    { return std::string();      }
-inline std::string suffix()    { return std::string();      }
-inline std::string extension() { return std::string("dll"); }
+inline string_type prefix()    { return {}; }
+inline string_type suffix()    { return {}; }
+inline string_type extension() { return L".dll"; }
 
 }
 
 }
 
 inline
-native::handle open(const std::string& dyn_lib_path)
+native::handle open(const std::filesystem::path& dyn_lib_path)
 {
-    native::handle lib_handle = ::LoadLibraryA(dyn_lib_path.c_str());
+    native::handle lib_handle = ::LoadLibraryW(dyn_lib_path.c_str());
     if (lib_handle == nullptr)
     {
-        throw std::runtime_error(std::string("Failed to open [dyn_lib_path:") + dyn_lib_path + "]: " + last_error());
+        throw std::runtime_error(std::string("Failed to open [dyn_lib_path:") + dyn_lib_path.string() + "]: " + last_error());
     }
 
     return lib_handle;

@@ -20,6 +20,9 @@ namespace native
 /// Native handle (usuall a pointer) on the loaded shared library
 using handle = detail::native::handle;
 
+/// Native string type for the OS
+using string_type = std::filesystem::path::string_type;
+
 /// @return An invalid library handle
 inline
 handle invalid_handle()
@@ -32,21 +35,21 @@ namespace name
 
 /// @return The name prefix of a shared library on the current system
 inline
-std::string prefix()
+string_type prefix()
 {
     return detail::native::name::prefix();
 }
 
 /// @return The name suffix of a shared library on the current system
 inline
-std::string suffix()
+string_type suffix()
 {
     return detail::native::name::suffix();
 }
 
 /// @return The file extension of a shared library on the current system
 inline
-std::string extension()
+string_type extension()
 {
     return detail::native::name::extension();
 }
@@ -62,16 +65,16 @@ std::string extension()
 ///         e.g. If @p lib_name is `awesome`,
 ///         then this function will return `libawesome.so` in Linux and `awesome.dll` in Windows
 inline
-std::string to_native_name(const std::string& lib_name)
+std::filesystem::path to_native_name(const std::filesystem::path& lib_name)
 {
     using namespace native::name;
     if (!extension().empty())
     {
-        return prefix() + lib_name + suffix() + std::string(".") + extension();
+        return prefix() + lib_name.native() + suffix() + extension();
     }
     else
     {
-        return prefix() + lib_name + suffix();
+        return prefix() + lib_name.native() + suffix();
     }
 }
 
@@ -83,7 +86,7 @@ std::string to_native_name(const std::string& lib_name)
 ///
 /// @throw std::runtime_error If it fails to load the library
 inline
-native::handle open(const std::string& dyn_lib_path)
+native::handle open(const std::filesystem::path& dyn_lib_path)
 {
     return detail::open(dyn_lib_path);
 }
@@ -164,11 +167,11 @@ public:
     }
 
     /// Loads a shared library using dynalo::open
-    explicit library(const std::string& dyn_lib_path) {
+    explicit library(const std::filesystem::path& dyn_lib_path) {
         open(dyn_lib_path);
     }
 
-    void open(const std::string& dyn_lib_path) {
+    void open(const std::filesystem::path& dyn_lib_path) {
         m_handle = dynalo::open(dyn_lib_path);
     }
 

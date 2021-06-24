@@ -2,6 +2,7 @@
 
 #include <string>
 #include <stdexcept>
+#include <filesystem>
 
 #include <dlfcn.h>
 
@@ -19,26 +20,27 @@ namespace native
 
 using handle = void*;
 
+using string_type = std::filesystem::path::string_type;
+
 inline handle invalid_handle() { return nullptr; }
 
 namespace name
 {
 
-inline std::string prefix()    { return std::string("lib"); }
-inline std::string suffix()    { return std::string();      }
-inline std::string extension() { return std::string("dylib");  }
+inline string_type prefix()    { return {"lib"}; }
+inline string_type suffix()    { return {}; }
+inline string_type extension() { return {".dylib"}; }
 
 }
 
 }
 
-inline
-native::handle open(const std::string& dyn_lib_path)
+inline native::handle open(const std::filesystem::path& dyn_lib_path)
 {
 	native::handle lib_handle = ::dlopen(dyn_lib_path.c_str(), RTLD_LAZY);
 	if (lib_handle == nullptr)
 	{
-		throw std::runtime_error(std::string("Failed to open [dyn_lib_path:") + dyn_lib_path + "]: " + last_error());
+        throw std::runtime_error(std::string("Failed to open [dyn_lib_path:") + dyn_lib_path.string() + "]: " + last_error());
 	}
 
 	return lib_handle;
