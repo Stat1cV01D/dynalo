@@ -1,8 +1,13 @@
 cmake_minimum_required(VERSION 3.0.0)
 
-project(dynalo)
+project(
+    "dynalo"
+    LANGUAGES CXX
+    VERSION 1.0.3
+    DESCRIPTION "C++ dyamic library loader"
+    )
 
-#set(CMAKE_CXX_STANDARD          11 )
+#set(CMAKE_CXX_STANDARD          17 )
 #set(CMAKE_CXX_STANDARD_REQUIRED ON )
 #set(CMAKE_CXX_EXTENSIONS        OFF)
 
@@ -17,8 +22,6 @@ if (UNIX)
 elseif(WIN32)
     target_link_libraries(${PROJECT_NAME} INTERFACE kernel32)
 endif()
-
-
 
 install(
     DIRECTORY   "include/${PROJECT_NAME}"
