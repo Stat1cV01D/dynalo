@@ -11,6 +11,6 @@
 #endif
 
 #define DYNALO_VERSION_MAJOR 1
-#define DYNALO_VERSION_MINOR 0
-#define DYNALO_VERSION_PATCH 3
-#define DYNALO_VERSION       0x010003  /**< major minor patch*/
+#define DYNALO_VERSION_MINOR 1
+#define DYNALO_VERSION_PATCH 0
+#define DYNALO_VERSION       0x010100  /**< major minor patch*/
