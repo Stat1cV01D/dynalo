@@ -148,14 +148,14 @@ public:
     library& operator=(const library& rhs ) = delete ;
 
     // move
-    library(library&& rhs)
+    library(library&& rhs) noexcept
         : m_handle(rhs.m_handle) {
         rhs.invalidate();
     }
 
-    library& operator=(library&& rhs) {
+    library& operator=(library&& rhs) noexcept {
         if ( &rhs != this ) {
-            m_handle       = rhs.m_handle;
+            m_handle = rhs.m_handle;
             rhs.invalidate();
         }
         return *this;
