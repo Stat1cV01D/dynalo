@@ -12,7 +12,7 @@ Everything is inside the `dynalo` namespace which is defined in the `dynalo/dyna
 * Load a shared library
 
     ```cpp
-    native::handle open(const std::string& dyn_lib_path);
+    native::handle open(const std::filesystem::path& dyn_lib_path);
     ```
 
 * Unload a shared library
@@ -35,7 +35,7 @@ Everything is inside the `dynalo` namespace which is defined in the `dynalo/dyna
     {
     public:
         /// Loads a shared library using dynalo::open
-        explicit library(const std::string& dyn_lib_path);
+        explicit library(const std::filesystem::path& dyn_lib_path);
 
         /// Unloads the shared library using dynalo::close
         ~library();
@@ -51,7 +51,7 @@ Everything is inside the `dynalo` namespace which is defined in the `dynalo/dyna
     * On Windows: Convert `awesome` to `awesome.dll`
 
     ```cpp
-    std::string to_native_name(const std::string& lib_name);
+    std::string to_native_name(const std::filesystem::path& lib_name);
     ```
 
 ## Example
@@ -107,7 +107,7 @@ See the [`test`](test) folder for details on how to compile.
     // usage: loader "path/to/lib/folder"
     int main(int argc, char* argv[])
     {
-        dynalo::library lib(std::string(argv[1]) + "/" + dynalo::to_native_name("shared"));
+        dynalo::library lib(std::filesystem::path(argv[1]) / dynalo::to_native_name("shared"));
 
         auto add_integers  = lib.get_function<int32_t(const int32_t, const int32_t)>("add_integers");
         auto print_message = lib.get_function<void(const char*)>("print_message");
@@ -121,7 +121,7 @@ See the [`test`](test) folder for details on how to compile.
 
 ## Dependencies
 
-* C++11 compiler: Mainly for the `using` and `auto` keywords. Open an issue or submit a PR if you need support for C++98)
+* C++17 compiler: Mainly for the `std::filesystem::path` support (and also `using` and `auto` keywords).
 * Linux: `libdl` (link with `-ldl`)
 * Windows: `kernel32.lib`
 
